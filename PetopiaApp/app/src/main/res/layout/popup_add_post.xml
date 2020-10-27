@@ -41,16 +41,15 @@
         app:layout_constraintTop_toBottomOf="@+id/popup_title" />
 
     <ImageView
-        android:background="#2d2d2d"
-        android:scaleType="centerCrop"
         android:id="@+id/popup_post_image"
         android:layout_width="0dp"
         android:layout_height="225dp"
-        android:layout_marginTop="96dp"
+        android:background="#2d2d2d"
+        android:scaleType="centerCrop"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/popup_description"
         tools:srcCompat="@tools:sample/backgrounds/scenic" />
 
     <ImageView
