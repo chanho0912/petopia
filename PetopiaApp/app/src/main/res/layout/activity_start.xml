@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@android:color/white"
+    tools:context="com.example.petopiaapp.Activities.StartActivity">
+
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:gravity="center">
+
+        <ImageView
+            android:id="@+id/app_icon"
+            android:layout_width="235dp"
+            android:layout_height="208dp"
+            android:layout_marginBottom="50px"
+            android:src="@drawable/app_icon" />
+
+        <ImageView
+            android:id="@+id/app_title1"
+            android:layout_width="373dp"
+            android:layout_height="70dp"
+            android:src="@drawable/app_title" />
+
+        <ImageView
+            android:id="@+id/app_title2"
+            android:layout_width="257dp"
+            android:layout_height="56dp"
+            android:src="@drawable/app_title2" />
+    </LinearLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>
