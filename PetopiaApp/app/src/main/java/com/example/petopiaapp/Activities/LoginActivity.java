@@ -41,6 +41,7 @@ public class LoginActivity extends AppCompatActivity {
     private FirebaseAuth mAuth;
     private DatabaseReference dbReference;
     Intent intent;
+    int test=0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -59,9 +60,7 @@ public class LoginActivity extends AppCompatActivity {
         final SharedPreferences.Editor editor = loginPref.edit();
         String defaultValue = loginPref.getString("login", null);
 
-
-
-
+        Log.d("Laaaaaaaaaaaaaaaaaaa", ":"+ defaultValue);
         if (defaultValue != null) {
             Toast.makeText(LoginActivity.this, "Start Auto-Login", Toast.LENGTH_SHORT).show();
             intent = new Intent(LoginActivity.this, HomeActivity.class); //여기!!!!! 수정!!!!!
