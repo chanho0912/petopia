@@ -6,6 +6,11 @@
     android:layout_height="match_parent"
     tools:context=".ui.home.HomeFragment">
 
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/postRV"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
+
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/fab_album"
         android:layout_width="wrap_content"
@@ -44,9 +49,11 @@
         android:layout_alignParentRight="true"
         android:layout_alignParentBottom="true"
         android:layout_marginRight="20dp"
-        android:layout_marginBottom="20dp"
+        android:layout_marginBottom="70dp"
         android:backgroundTint="#FF9800"
         android:src="@drawable/ic_baseline_add_24"
         app:borderWidth="0dp"
         app:fabSize="normal" />
+
+
 </RelativeLayout>

@@ -40,16 +40,17 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/popup_title" />
 
-    <ImageView
+    <androidx.viewpager2.widget.ViewPager2
+        android:background="#2d2d2d"
+        android:scaleType="centerCrop"
         android:id="@+id/popup_post_image"
         android:layout_width="0dp"
         android:layout_height="225dp"
-        android:background="#2d2d2d"
-        android:scaleType="centerCrop"
+        android:layout_marginTop="96dp"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/popup_description"
+        app:layout_constraintTop_toTopOf="parent"
         tools:srcCompat="@tools:sample/backgrounds/scenic" />
 
     <ImageView
@@ -66,7 +67,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/popup_post_image"
-    />
+        />
 
     <ProgressBar
         android:padding="4dp"
@@ -80,4 +81,19 @@
         app:layout_constraintEnd_toEndOf="@id/add_post_button"
         app:layout_constraintStart_toStartOf="@id/add_post_button"
         app:layout_constraintTop_toTopOf="@id/add_post_button" />
+
+    <ImageView
+        android:padding="12dp"
+        android:id="@+id/upload_Album_Image"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:src="@drawable/ic_baseline_add_photo_alternate_24"
+        android:background="@drawable/circle_bg"
+        android:backgroundTint="#FF9800"
+        app:layout_constraintRight_toRightOf="@id/popup_post_image"
+        app:layout_constraintBottom_toBottomOf="@id/popup_post_image"
+        android:layout_marginBottom="4dp"
+        android:layout_marginRight="4dp"
+        tools:layout_editor_absoluteX="327dp"
+        tools:layout_editor_absoluteY="310dp" />
 </androidx.constraintlayout.widget.ConstraintLayout>
