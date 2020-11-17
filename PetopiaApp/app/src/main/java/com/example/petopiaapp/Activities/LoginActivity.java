@@ -54,7 +54,7 @@ public class LoginActivity extends AppCompatActivity {
         signup_button = (Button) findViewById(R.id.signup_button);
         mAuth = FirebaseAuth.getInstance();
         loginPref = this.getSharedPreferences("user_SP", this.MODE_PRIVATE);
-        dbReference = FirebaseDatabase.getInstance().getReference().child("user");
+        dbReference = FirebaseDatabase.getInstance().getReference().child("Users");
 
         // Login SharedPreferences
         final SharedPreferences.Editor editor = loginPref.edit();
@@ -67,7 +67,7 @@ public class LoginActivity extends AppCompatActivity {
             try {
                 FirebaseDatabase.getInstance()
                         .getReference()
-                        .child("user")
+                        .child("Users")
                         .child(mAuth.getUid())
                         .child("friend_list")
                         .addValueEventListener(new ValueEventListener() {
@@ -98,10 +98,10 @@ public class LoginActivity extends AppCompatActivity {
                         if(childKey.equals(mAuth.getUid()))
                         {
                             Map<String, Object> currentObject = (Map<String, Object>) user.get(childKey);
-                            user_id=currentObject.get("user_id").toString();
-                            nickname=currentObject.get("nickname").toString();
-                            intent.putExtra("user_id", user_id);
-                            intent.putExtra("nickname", nickname);
+                            user_id=currentObject.get("email").toString();
+                            nickname=currentObject.get("username").toString();
+                            intent.putExtra("email", user_id);
+                            intent.putExtra("username", nickname);
                             Log.d("LOG:user ID 22", ":"+user_id);
                             startActivity(intent);
                             finish();
@@ -159,10 +159,10 @@ public class LoginActivity extends AppCompatActivity {
                                                     if(childKey.equals(mAuth.getUid()))
                                                     {
                                                         Map<String, Object> currentObject = (Map<String, Object>) user.get(childKey);
-                                                        user_id=currentObject.get("user_id").toString();
-                                                        nickname=currentObject.get("nickname").toString();
-                                                        intent.putExtra("user_id", user_id);
-                                                        intent.putExtra("nickname", nickname);
+                                                        user_id=currentObject.get("email").toString();
+                                                        nickname=currentObject.get("username").toString();
+                                                        intent.putExtra("email", user_id);
+                                                        intent.putExtra("username", nickname);
                                                         Log.d("LOG:user ID 22", ":"+user_id);
                                                         startActivity(intent);
                                                         finish();

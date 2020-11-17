@@ -31,6 +31,7 @@ public class SignupActivity extends AppCompatActivity {
     String user_id;
     String pw;
     String nickname;
+    String imageurl;
     String UID;
     EditText edit_signup_id;
     EditText edit_signup_pw;
@@ -288,10 +289,10 @@ public class SignupActivity extends AppCompatActivity {
         Map<String, Object> childUpdates = new HashMap<>();
         Map<String, Object> postValues = null;
         if (add) {
-            User new_user = new User(user_id, pw, nickname, UID);
+            User new_user = new User(user_id, nickname, UID, imageurl);
             postValues = new_user.toMap();
         }
-        childUpdates.put("/user/" + UID, postValues);
+        childUpdates.put("/Users/" + UID, postValues);
         dbReference.updateChildren(childUpdates);
     }
 

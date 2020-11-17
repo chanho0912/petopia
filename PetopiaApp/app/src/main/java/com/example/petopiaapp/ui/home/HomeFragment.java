@@ -1,4 +1,6 @@
 package com.example.petopiaapp.ui.home;
+import com.example.petopiaapp.Activities.PostActivity;
+import com.example.petopiaapp.Adapter.PostAdapter_temp;
 import com.example.petopiaapp.R;
 
 import android.Manifest;
@@ -37,7 +39,14 @@ import androidx.viewpager2.widget.CompositePageTransformer;
 import androidx.viewpager2.widget.MarginPageTransformer;
 import androidx.viewpager2.widget.ViewPager2;
 
+import com.example.petopiaapp.models.Post_temp;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -64,224 +73,113 @@ public class HomeFragment extends Fragment implements  View.OnClickListener{
     TextView popupTitle, popupDescription;
     ProgressBar popupClickProgress;
 
-    RecyclerView PostRecyclerView ;
+    RecyclerView recyclerView ;
     RecyclerView.LayoutManager layoutManager;
-    PostAdapter postAdapter ;
-    List<Post> PostList ;
+    PostAdapter_temp postAdapter ;
+    List<Post_temp> postLists ;
+    private List<String> followingList;
+
 
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
-        homeViewModel =
-                ViewModelProviders.of(this).get(HomeViewModel.class);
-        View root = inflater.inflate(R.layout.fragment_home, container, false);
-        // mAuth = FirebaseAuth.getInstance();
-        // currentUser = mAuth.getCurrentUser();
+        View view = inflater.inflate(R.layout.fragment_home, container, false);
 
-        listslides = new ArrayList<>();
+        recyclerView = view.findViewById(R.id.postRV);
+        recyclerView.setHasFixedSize(true);
+        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext());
+        linearLayoutManager.setReverseLayout(true);
+        linearLayoutManager.setStackFromEnd(true);
+        recyclerView.setLayoutManager(linearLayoutManager);
+        postLists = new ArrayList<>();
+        postAdapter = new PostAdapter_temp(getContext(),postLists);
+        recyclerView.setAdapter(postAdapter);
 
-
-        PostRecyclerView = root.findViewById(R.id.postRV);
-
-        //layoutManager = new StaggeredGridLayoutManager(1,StaggeredGridLayoutManager.HORIZONTAL);
-        //PostRecyclerView.setLayoutManager(layoutManager);
-
-        PostRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
-        PostRecyclerView.setHasFixedSize(true);
-
-        inipopup();
-        setupPopupImageClick();
+        checkFollowing();
 
         fab_open = AnimationUtils.loadAnimation(getActivity().getApplicationContext(), R.anim.fab_open);
         fab_close = AnimationUtils.loadAnimation(getActivity().getApplicationContext(), R.anim.fab_close);
 
-        fab = (FloatingActionButton) root.findViewById(R.id.fab_main);
-        fab_camera = (FloatingActionButton) root.findViewById(R.id.fab_camera);
-        fab_album = (FloatingActionButton) root.findViewById(R.id.fab_album);
+        fab = (FloatingActionButton) view.findViewById(R.id.fab_main);
+        fab_camera = (FloatingActionButton) view.findViewById(R.id.fab_camera);
+        fab_album = (FloatingActionButton) view.findViewById(R.id.fab_album);
 
         fab.setOnClickListener(this);
         fab_camera.setOnClickListener(this);
         fab_album.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                popup_add_post.show();
+                startActivity(new Intent(getActivity(), PostActivity.class));
             }
         });
 
 
-        return root;
+        return view;
     }
 
-    @Override
-    public void onStart() {
-        super.onStart();
-        // get database reference
-        // on data change
-        PostList = new ArrayList<>() ;
+    private void checkFollowing(){
+        followingList = new ArrayList<>();
 
-        //Uri uri_1 = Uri.parse("android.resource://com.worldbright.puppycam.ui.home/drawable/dog1.jpg");
+        DatabaseReference reference = FirebaseDatabase.getInstance().getReference("Follow")
+                .child(FirebaseAuth.getInstance().getCurrentUser().getUid())
+                .child("following");
 
-        Uri uri_1 = Uri.parse(ContentResolver.SCHEME_ANDROID_RESOURCE +
-                "://" + getContext().getResources().getResourcePackageName(R.drawable.dog1)
-                + '/' + getContext().getResources().getResourceTypeName(R.drawable.dog1)
-                + '/' + getContext().getResources().getResourceEntryName(R.drawable.dog1));
-
-        Uri uri_2 = Uri.parse(ContentResolver.SCHEME_ANDROID_RESOURCE +
-                "://" + getContext().getResources().getResourcePackageName(R.drawable.dog2)
-                + '/' + getContext().getResources().getResourceTypeName(R.drawable.dog2)
-                + '/' + getContext().getResources().getResourceEntryName(R.drawable.dog2));
-
-
-        Uri uri_3 = Uri.parse(ContentResolver.SCHEME_ANDROID_RESOURCE +
-                "://" + getContext().getResources().getResourcePackageName(R.drawable.dog3)
-                + '/' + getContext().getResources().getResourceTypeName(R.drawable.dog3)
-                + '/' + getContext().getResources().getResourceEntryName(R.drawable.dog3));
-
-        Uri uri_4 = Uri.parse(ContentResolver.SCHEME_ANDROID_RESOURCE +
-                "://" + getContext().getResources().getResourcePackageName(R.drawable.dog4)
-                + '/' + getContext().getResources().getResourceTypeName(R.drawable.dog4)
-                + '/' + getContext().getResources().getResourceEntryName(R.drawable.dog4));
-
-        Uri uri_profile = Uri.parse(ContentResolver.SCHEME_ANDROID_RESOURCE +
-                "://" + getContext().getResources().getResourcePackageName(R.drawable.profile)
-                + '/' + getContext().getResources().getResourceTypeName(R.drawable.profile)
-                + '/' + getContext().getResources().getResourceEntryName(R.drawable.profile));
-
-        Post temp_1 = new Post("Test_1", "test_1", uri_1.toString(), "1", uri_profile.toString(), 1);
-        Post temp_2 = new Post("Test_2", "test_2", uri_2.toString(), "1", uri_profile.toString(), 1);
-        Post temp_3 = new Post("Test_3", "test_3", uri_4.toString(), "1", uri_profile.toString(), 1);
-        Post temp_4 = new Post("Test_4", "test_4", uri_3.toString(), "1", uri_profile.toString(), 1);
-
-        PostList.add(temp_1);
-        PostList.add(temp_2);
-        PostList.add(temp_3);
-        PostList.add(temp_4);
-
-        postAdapter = new PostAdapter(getActivity(), PostList);
-        PostRecyclerView.setAdapter(postAdapter);
-    }
-
-    private void setupPopupImageClick() {
-        popupAlbumButton.setOnClickListener(new View.OnClickListener() {
+        reference.addValueEventListener(new ValueEventListener() {
             @Override
-            public void onClick(View view) {
-                checkAndRequestForPermission();
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                followingList.clear();
+                for(DataSnapshot snapshot1: snapshot.getChildren()){
+                    followingList.add(snapshot1.getKey());
+                }
+
+                readPosts();
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
             }
         });
     }
 
-    private void checkAndRequestForPermission(){
-        if(ContextCompat.checkSelfPermission(frag_home_activity, Manifest.permission.READ_EXTERNAL_STORAGE)
-                != PackageManager.PERMISSION_GRANTED){
-            if(ActivityCompat.shouldShowRequestPermissionRationale(frag_home_activity, Manifest.permission.READ_EXTERNAL_STORAGE)){
-                Toast.makeText(frag_home_activity, "please accept for required permission", Toast.LENGTH_SHORT).show();
-            }
-            else
-            {
-                ActivityCompat.requestPermissions(frag_home_activity, new String[] {Manifest.permission.READ_EXTERNAL_STORAGE}, PReqCode);
-            }
-        }
-        else{
-            openGallery();
-        }
-    }
+    private void readPosts(){
+        DatabaseReference reference = FirebaseDatabase.getInstance().getReference("Posts");
+        reference.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                postLists.clear();
+                for(DataSnapshot snapshot1:snapshot.getChildren()){
+                    Post_temp post = snapshot1.getValue(Post_temp.class);
+                    for (String id : followingList){
+                        if(post.getPublisher().equals(id)){
+                            postLists.add(post);
+                        }
+                    }
+                }
 
-    private void openGallery(){
-        Intent galleryIntent = new Intent(Intent.ACTION_GET_CONTENT);
-        galleryIntent.setType("image/*");
-        galleryIntent.putExtra(Intent.EXTRA_ALLOW_MULTIPLE, true);
-        galleryIntent.setAction(Intent.ACTION_GET_CONTENT);
-        startActivityForResult(Intent.createChooser(galleryIntent, "select image"), REQUESCODE);
+                postAdapter.notifyDataSetChanged();
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
     }
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data){
         super.onActivityResult(requestCode, resultCode, data);
 
-        if(resultCode == RESULT_OK && requestCode == REQUESCODE){
-            if(data.getClipData() != null){
-                int count = data.getClipData().getItemCount();
-                for(int i = 0; i < count; i++) {
-                    pickedImgUri = data.getClipData().getItemAt(i).getUri();
-                    listslides.add(new Slide(pickedImgUri.toString()));
-                }
-            }
-            else{
-                pickedImgUri = data.getData();
-                listslides.add(new Slide(pickedImgUri.toString()));
-            }
-
             // showMessage("list slides update done");
 
-            popup_add_post.setContentView(R.layout.popup_add_post);
+            popup_add_post.setContentView(R.layout.activity_post);
             popup_add_post.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
             popup_add_post.getWindow().setLayout(Toolbar.LayoutParams.MATCH_PARENT, Toolbar.LayoutParams.WRAP_CONTENT);
             popup_add_post.getWindow().getAttributes().gravity = Gravity.TOP;
 
-            popupPostImage = popup_add_post.findViewById(R.id.popup_post_image);
-            popupPostImage.setAdapter(new SliderAdapter(listslides, popupPostImage));
 
-            popupPostImage.setClipToPadding(false);
-            popupPostImage.setClipChildren(false);
-            popupPostImage.setOffscreenPageLimit(3);
-            popupPostImage.getChildAt(0).setOverScrollMode(RecyclerView.OVER_SCROLL_NEVER);
-
-            CompositePageTransformer compositePageTransformer = new CompositePageTransformer();
-            compositePageTransformer.addTransformer(new MarginPageTransformer(40));
-            compositePageTransformer.addTransformer(new ViewPager2.PageTransformer() {
-                @Override
-                public void transformPage(@NonNull View page, float position) {
-                    float r = 1 - Math.abs(position);
-                    page.setScaleY(0.85f + r * 0.15f);
-                }
-            });
-
-            popupPostImage.setPageTransformer(compositePageTransformer);
         }
-    }
-
-
-    private void inipopup() {
-        popup_add_post.setContentView(R.layout.popup_add_post);
-        popup_add_post.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
-        popup_add_post.getWindow().setLayout(Toolbar.LayoutParams.MATCH_PARENT, Toolbar.LayoutParams.WRAP_CONTENT);
-        popup_add_post.getWindow().getAttributes().gravity = Gravity.TOP;
-
-        popupUserImage = popup_add_post.findViewById(R.id.popup_user_image);
-
-        popupPostImage = popup_add_post.findViewById(R.id.popup_post_image);
-        popupPostImage.setAdapter(new SliderAdapter(listslides, popupPostImage));
-
-        popupAlbumButton = popup_add_post.findViewById(R.id.upload_Album_Image);
-        popupPostButton = popup_add_post.findViewById(R.id.add_post_button);
-        popupTitle = popup_add_post.findViewById(R.id.popup_title);
-        popupDescription = popup_add_post.findViewById(R.id.popup_description);
-        popupClickProgress = popup_add_post.findViewById(R.id.popup_progressBar);
-
-        // here glide user photo in popupUserImage
-
-        popupPostButton.setOnClickListener(new View.OnClickListener(){
-            @Override
-            public void onClick(View view) {
-                popupPostButton.setVisibility(View.INVISIBLE);
-                popupClickProgress.setVisibility(View.VISIBLE);
-
-                if(!popupTitle.getText().toString().isEmpty() && !popupDescription.getText().toString().isEmpty() && popupPostImage != null){
-                    showMessage("posting...");
-                    //Post post = new Post
-                }
-                else{
-                    showMessage("please verify all input fields and choose Post Image");
-                    popupPostButton.setVisibility(View.VISIBLE);
-                    popupClickProgress.setVisibility(View.INVISIBLE);
-                }
-            }
-        });
-    }
-
-    private void showMessage(String message) {
-        Toast.makeText(frag_home_activity, message, Toast.LENGTH_SHORT).show();
-    }
 
     @Override
     public void onAttach(Activity activity) {
@@ -295,11 +193,7 @@ public class HomeFragment extends Fragment implements  View.OnClickListener{
         int id = v.getId();
         switch (id) {
             case R.id.fab_main:
-                anim();
-                break;
             case R.id.fab_camera:
-                anim();
-                break;
             case R.id.fab_album:
                 anim();
                 break;

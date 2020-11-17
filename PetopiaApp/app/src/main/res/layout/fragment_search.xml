@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout
+<RelativeLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
@@ -8,101 +8,42 @@
     android:background="@android:color/white"
     tools:context=".ui.search.searchFragment">
 
-
-    <LinearLayout
-        android:id="@+id/banner"
+    <com.google.android.material.appbar.AppBarLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:gravity="fill_horizontal"
-        android:orientation="horizontal"
-        android:weightSum="1"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
+        android:id="@+id/bar"
+        android:background="?android:attr/windowBackground">
 
-        <LinearLayout
-            android:id="@+id/search_bar"
-            android:layout_weight="0.99"
-            android:layout_width="0dp"
-            android:layout_margin="10dp"
+        <androidx.appcompat.widget.Toolbar
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:weightSum="1"
-            android:orientation="horizontal"
-            android:background="@drawable/box_round_gray">
+            android:background="@drawable/box_round_gray"
+            android:id="@+id/toolbar">
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/ic_search_light"/>
 
             <EditText
-                android:id="@+id/search_string"
-                android:layout_weight="0.99"
-                android:layout_width="0dp"
-                android:layout_height="40dp"
-                android:layout_marginLeft="15dp"
-                android:inputType="text"
-                android:backgroundTint="#757575"
-                android:hint="Enter the search keyword."
-                android:textColorHint="#424242"
-                android:textColor="@android:color/black"
-                android:textSize="15dp" />
-
-            <Button
-                android:id="@+id/button_search"
-                android:layout_width="25dp"
-                android:layout_height="25dp"
-                android:layout_marginRight="15dp"
-                android:layout_gravity="center_vertical"
-
-                android:background="@drawable/search_icon" />
-        </LinearLayout>
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/search_bar"
+                android:background="@android:color/transparent"
+                android:hint="Search.."
+                android:layout_marginStart="10dp"
+                android:layout_marginLeft="10dp"/>
 
 
+        </androidx.appcompat.widget.Toolbar>
 
-    </LinearLayout>
+    </com.google.android.material.appbar.AppBarLayout>
 
-    <LinearLayout
-        android:id="@+id/banner2"
+    <androidx.recyclerview.widget.RecyclerView
         android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_marginLeft="10dp"
-        android:layout_marginRight="10dp"
-        android:orientation="horizontal"
-        app:layout_constraintEnd_toEndOf="@+id/_listView"
-        app:layout_constraintStart_toStartOf="@+id/banner"
-        app:layout_constraintTop_toBottomOf="@+id/banner">
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/bar"
+        android:id="@+id/recycler_view_search"
+        ></androidx.recyclerview.widget.RecyclerView>
 
-        <Button
-            android:id="@+id/button_search2"
-            android:layout_width="185dp"
-            android:layout_height="wrap_content"
-            android:layout_marginRight="20dp"
-            android:backgroundTint="@color/main_orange"
-            android:text="ORDER: Recent"
-            android:layout_gravity="center"
-            android:textSize="16dp" />
-
-        <Button
-            android:id="@+id/button_search3"
-            android:layout_width="130dp"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:backgroundTint="@color/sub_yellow"
-            android:text="FILTER: ON"
-            android:textSize="16dp" />
-    </LinearLayout>
-
-    <ListView
-        android:id="@+id/_listView"
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_margin="10dp"
-        android:clickable="true"
-        android:divider="#D5D5D5"
-        android:dividerHeight="2dp"
-        android:focusable="true"
-        android:orientation="vertical"
-        android:visibility="visible"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="@+id/banner2"
-        app:layout_constraintTop_toBottomOf="@+id/banner2"
-        app:layout_constraintVertical_bias="0.0" />
-
-</androidx.constraintlayout.widget.ConstraintLayout>
+</RelativeLayout>
