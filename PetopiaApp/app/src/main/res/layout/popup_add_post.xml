@@ -6,57 +6,45 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
 
-    <ImageView
-        android:background="#ffffff"
-        android:id="@+id/popup_user_image"
-        android:layout_width="48dp"
+    <de.hdodenhof.circleimageview.CircleImageView
+        android:id="@+id/popup_user_image_qna"
+        android:layout_width="40dp"
         android:layout_height="0dp"
-        app:layout_constraintBottom_toTopOf="@id/popup_description"
+        android:background="#ffffff"
+        app:layout_constraintBottom_toTopOf="@id/popup_description_qna"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/popup_title"
+        app:layout_constraintStart_toEndOf="@+id/popup_title_qna"
         app:layout_constraintTop_toTopOf="parent"
         tools:srcCompat="@tools:sample/avatars" />
 
     <EditText
         android:background="@drawable/popup_edittext_style"
-        android:id="@+id/popup_title"
+        android:id="@+id/popup_title_qna"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:ems="10"
         android:hint="Title: "
         android:inputType="textPersonName"
-        app:layout_constraintEnd_toStartOf="@+id/popup_user_image"
+        app:layout_constraintEnd_toStartOf="@+id/popup_user_image_qna"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
     <EditText
-        android:background="@drawable/popup_edittext_style"
-        android:id="@+id/popup_description"
+        android:id="@+id/popup_description_qna"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
+        android:background="@drawable/popup_edittext_style"
         android:ems="10"
-        android:hint="Description: "
         android:inputType="textPersonName"
+        android:hint="Description"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/popup_title" />
+        app:layout_constraintTop_toBottomOf="@+id/popup_title_qna" />
 
-    <androidx.viewpager2.widget.ViewPager2
-        android:background="#2d2d2d"
-        android:scaleType="centerCrop"
-        android:id="@+id/popup_post_image"
-        android:layout_width="0dp"
-        android:layout_height="225dp"
-        android:layout_marginTop="96dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        tools:srcCompat="@tools:sample/backgrounds/scenic" />
 
     <ImageView
         android:padding="12dp"
-        android:id="@+id/add_post_button"
+        android:id="@+id/add_post_button_qna"
         android:layout_width="56dp"
         android:layout_height="56dp"
         android:src ="@drawable/ic_baseline_add_24"
@@ -64,37 +52,24 @@
         android:backgroundTint="#FF9800"
         app:layout_editor_absoluteX="175dp"
         app:layout_editor_absoluteY="298dp"
-        app:layout_constraintBottom_toBottomOf="@id/popup_post_image"
+        app:layout_constraintBottom_toBottomOf="@id/popup_description_qna"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/popup_post_image"
+        app:layout_constraintTop_toBottomOf="@id/popup_description_qna"
         />
 
     <ProgressBar
         android:padding="4dp"
-        android:id="@+id/popup_progressBar"
+        android:id="@+id/popup_progressBar_qna"
         style="?android:attr/progressBarStyle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:background="@drawable/circle_bg"
         android:visibility="invisible"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="@id/add_post_button"
-        app:layout_constraintStart_toStartOf="@id/add_post_button"
-        app:layout_constraintTop_toTopOf="@id/add_post_button" />
+        app:layout_constraintEnd_toEndOf="@id/add_post_button_qna"
+        app:layout_constraintStart_toStartOf="@id/add_post_button_qna"
+        app:layout_constraintTop_toTopOf="@id/add_post_button_qna" />
 
-    <ImageView
-        android:padding="12dp"
-        android:id="@+id/upload_Album_Image"
-        android:layout_width="40dp"
-        android:layout_height="40dp"
-        android:src="@drawable/ic_baseline_add_photo_alternate_24"
-        android:background="@drawable/circle_bg"
-        android:backgroundTint="#FF9800"
-        app:layout_constraintRight_toRightOf="@id/popup_post_image"
-        app:layout_constraintBottom_toBottomOf="@id/popup_post_image"
-        android:layout_marginBottom="4dp"
-        android:layout_marginRight="4dp"
-        tools:layout_editor_absoluteX="327dp"
-        tools:layout_editor_absoluteY="310dp" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>

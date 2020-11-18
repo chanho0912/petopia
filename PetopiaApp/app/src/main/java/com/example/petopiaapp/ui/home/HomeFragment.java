@@ -62,6 +62,7 @@ public class HomeFragment extends Fragment implements  View.OnClickListener{
     private Uri pickedImgUri;
 
     private Activity frag_home_activity = null;
+
     private static final int PReqCode = 2;
     private static final int REQUESCODE = 2;
 
