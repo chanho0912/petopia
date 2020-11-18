@@ -241,15 +241,19 @@ public class qnaFragment extends Fragment implements View.OnClickListener {
 
     private void add_post(final QnaPost qnaPost) {
         FirebaseDatabase database = FirebaseDatabase.getInstance();
-        DatabaseReference myRef = database.getReference("QnaPosts");
+        DatabaseReference myRef = database.getReference("QnaPosts").push();
+
+        String key = myRef.getKey();
+        qnaPost.setPostid(key);
 
         HashMap<String, Object> hashMap = new HashMap<>();
         hashMap.put("description", popupDescription.getText().toString());
+        hashMap.put("postid", key);
         hashMap.put("title", popupTitle.getText().toString());
         hashMap.put("userId", qnaPost.getUserId());
         hashMap.put("userPhoto", qnaPost.getUserPhoto());
 
-        myRef.push().setValue(hashMap).addOnSuccessListener(new OnSuccessListener<Void>() {
+        myRef.setValue(hashMap).addOnSuccessListener(new OnSuccessListener<Void>() {
             @Override
             public void onSuccess(Void aVoid) {
                 showMessage("upload success!");

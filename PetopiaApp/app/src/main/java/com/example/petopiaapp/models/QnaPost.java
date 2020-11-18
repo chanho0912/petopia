@@ -2,6 +2,7 @@ package com.example.petopiaapp.models;
 
 public class QnaPost {
     private String description;
+    private String postid;
     private String title;
     private String userId;
     private String userPhoto;
@@ -11,6 +12,14 @@ public class QnaPost {
         this.title = title;
         this.userId = userId;
         this.userPhoto = userPhoto;
+    }
+
+    public String getPostid() {
+        return postid;
+    }
+
+    public void setPostid(String postid) {
+        this.postid = postid;
     }
 
     public QnaPost() {}
