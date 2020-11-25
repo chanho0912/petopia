@@ -1,4 +1,5 @@
 package com.example.petopiaapp.ui.home;
+import com.example.petopiaapp.Activities.CameraActivity;
 import com.example.petopiaapp.Activities.PostActivity;
 import com.example.petopiaapp.Adapter.PostAdapter_temp;
 import com.example.petopiaapp.R;
@@ -105,7 +106,13 @@ public class HomeFragment extends Fragment implements  View.OnClickListener{
         fab_album = (FloatingActionButton) view.findViewById(R.id.fab_album);
 
         fab.setOnClickListener(this);
-        fab_camera.setOnClickListener(this);
+        //fab_camera.setOnClickListener(this);
+        fab_camera.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                startActivity(new Intent(getActivity(), CameraActivity.class));
+            }
+        });
         fab_album.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
