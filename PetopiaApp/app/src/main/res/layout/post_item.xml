@@ -1,16 +1,20 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout
+<androidx.cardview.widget.CardView
     xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content">
-
+    android:layout_height="wrap_content"
+    app:cardCornerRadius="5dp"
+    app:cardElevation="3dp"
+    app:cardUseCompatPadding="true">
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical">
 
         <LinearLayout
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:orientation="horizontal">
 
@@ -31,80 +35,84 @@
                 android:textColor="@color/colorPrimaryDark"
                 android:text="username"
                 />
+            <View
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:layout_weight="1" >
+
+            </View>
+                <ImageView
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:layout_gravity="center_vertical"
+                    android:id="@+id/like"
+                    android:src="@drawable/ic_like"
+                    />
+                <ImageView
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:id="@+id/comment"
+                    android:layout_gravity="center_vertical"
+                    android:src="@drawable/ic_comment"
+                    android:layout_marginStart="8dp"/>
+
+                <ImageView
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:id="@+id/save"
+                    android:layout_gravity="center_vertical"
+                    android:src="@drawable/ic_save"
+                    android:layout_marginStart="8dp"
+                    android:layout_marginEnd="8dp"
+                    />
         </LinearLayout>
 
-        <ImageView
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:id="@+id/post_image"
-            android:src="@mipmap/ic_launcher"/>
+            android:padding="8dp"
+            android:orientation="vertical">
 
-        <RelativeLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:padding="8dp">
-
-            <ImageView
-                android:layout_width="30dp"
-                android:layout_height="30dp"
-                android:id="@+id/like"
-                android:src="@drawable/ic_like"
+            <androidx.viewpager2.widget.ViewPager2
+                android:background="#2d2d2d"
+                android:layout_width="match_parent"
+                android:layout_height="225dp"
+                android:id="@+id/post_image"
+                android:backgroundTint="#FFFFFF"
                 />
-            <ImageView
-                android:layout_width="30dp"
-                android:layout_height="30dp"
-                android:id="@+id/comment"
-                android:src="@drawable/ic_comment"
-                android:layout_toEndOf="@+id/like"
-                android:layout_marginStart="10dp"/>
 
-            <ImageView
-                android:layout_width="30dp"
-                android:layout_height="30dp"
-                android:layout_alignParentEnd="true"
-                android:id="@+id/save"
-                android:src="@drawable/ic_save"
-                />
-        </RelativeLayout>
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="8dp"
-            android:textStyle="bold"
-            android:id="@+id/likes"
-            android:text="10 likes"
-            android:textColor="@color/colorPrimaryDark"/>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:layout_marginStart="8dp"
+                android:textStyle="bold"
+                android:id="@+id/likes"
+                android:text="10 likes"
+                android:textColor="@color/colorPrimaryDark"/>
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="8dp"
-            android:textStyle="bold"
-            android:id="@+id/publisher"
-            android:text="username"
-            android:textColor="@color/colorPrimaryDark"/>
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="8dp"
-            android:textStyle="bold"
-            android:id="@+id/description"
-            android:text="description"
-            android:textColor="@color/colorPrimaryDark"/>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:textStyle="bold"
+                android:id="@+id/description"
+                android:text="description"
+                android:textColor="@color/colorPrimaryDark"/>
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="8dp"
-            android:layout_marginTop="5dp"
-            android:layout_marginBottom="10dp"
-            android:textStyle="bold"
-            android:id="@+id/comments"
-            android:text="View All 20 Comments"
-            android:textColor="@color/colorAccent"/>
-
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:layout_marginTop="5dp"
+                android:layout_marginBottom="10dp"
+                android:textStyle="bold"
+                android:id="@+id/comments"
+                android:text="View All 20 Comments"
+                android:textColor="@color/colorAccent"/>
+        </LinearLayout>
     </LinearLayout>
 
-</RelativeLayout>
+</androidx.cardview.widget.CardView>

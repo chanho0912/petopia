@@ -1,5 +1,6 @@
 package com.example.petopiaapp.ui.home;
 
+import android.content.Context;
 import android.net.Uri;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -15,20 +16,21 @@ import com.makeramen.roundedimageview.RoundedImageView;
 
 import java.util.List;
 
-public class SliderAdapter extends RecyclerView.Adapter<SliderAdapter.SliderViewHolder> {
-
+public class HomeSliderAdapter extends RecyclerView.Adapter<HomeSliderAdapter.HomeSliderViewHolder>{
     private List<Slide> slideList;
     private ViewPager2 viewPager2;
+    private Context mContext;
 
-    public SliderAdapter(List<Slide> slideList, ViewPager2 viewPager2) {
+    public HomeSliderAdapter(Context mcontext, List<Slide> slideList, ViewPager2 viewPager2) {
+        this.mContext = mcontext;
         this.slideList = slideList;
         this.viewPager2 = viewPager2;
     }
 
     @NonNull
     @Override
-    public SliderViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        return new SliderViewHolder(
+    public HomeSliderAdapter.HomeSliderViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+        return new HomeSliderAdapter.HomeSliderViewHolder(
                 LayoutInflater.from(parent.getContext()).inflate(
                         R.layout.slide_item_container,
                         parent,
@@ -38,7 +40,7 @@ public class SliderAdapter extends RecyclerView.Adapter<SliderAdapter.SliderView
     }
 
     @Override
-    public void onBindViewHolder(@NonNull SliderViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull HomeSliderAdapter.HomeSliderViewHolder holder, int position) {
         holder.setImage(slideList.get(position));
     }
 
@@ -47,17 +49,17 @@ public class SliderAdapter extends RecyclerView.Adapter<SliderAdapter.SliderView
         return slideList.size();
     }
 
-    class SliderViewHolder extends RecyclerView.ViewHolder{
+    class HomeSliderViewHolder extends RecyclerView.ViewHolder{
 
         private RoundedImageView imageView;
 
-        SliderViewHolder(@NonNull View itemView){
+        HomeSliderViewHolder(@NonNull View itemView){
             super(itemView);
             imageView = itemView.findViewById(R.id.imageSlide);
         }
+
         void setImage(Slide slide){
-            imageView.setImageURI(Uri.parse(slide.getImage()));
+            Glide.with(mContext).load(slide.getImage()).into(imageView);
         }
     }
-
 }
