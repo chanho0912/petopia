@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".Activities.CommentsActivity">
+    tools:context=".Activities.QnaDetailActivity">
 
     <androidx.appcompat.widget.Toolbar
         android:layout_width="match_parent"
@@ -12,29 +12,40 @@
         android:id="@+id/toolbar"
         android:background="?android:attr/windowBackground"/>
 
+    <TextView
+        android:id="@+id/qna_detail_desc"
+        android:layout_width="match_parent"
+        android:layout_height="72dp"
+        android:textSize="20sp"
+        android:layout_below="@+id/toolbar"
+        android:layout_margin="8dp"
+        />
+
     <androidx.recyclerview.widget.RecyclerView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/recycler_view"
-        android:layout_below="@+id/toolbar"
-        android:layout_above="@+id/bottom"/>
+        android:id="@+id/qna_detail_recycler_view"
+        android:layout_below="@+id/qna_detail_desc"
+        android:layout_above="@+id/qna_detail_bottom"
+        android:layout_margin="8dp"/>
 
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/bottom"
+        android:id="@+id/qna_detail_bottom"
         android:padding="4dp"
-        android:layout_alignParentBottom="true">
+        android:layout_alignParentBottom="true"
+        android:layout_margin="8dp">
 
         <de.hdodenhof.circleimageview.CircleImageView
             android:layout_width="40dp"
             android:layout_height="40dp"
-            android:id="@+id/image_profile" />
+            android:id="@+id/qna_detail_image_profile" />
 
         <EditText
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_toRightOf="@+id/image_profile"
+            android:layout_toRightOf="@+id/qna_detail_image_profile"
             android:hint="Add a comment..."
             android:id="@+id/add_comment"
             android:layout_centerVertical="true"
