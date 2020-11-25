@@ -205,7 +205,7 @@ public class PostAdapter_temp extends RecyclerView.Adapter<PostAdapter_temp.View
                     comments.setText("Add a Comment!");
                 }
                 else{
-                    comments.setText("View All " + snapshot.getChildrenCount()+" Comments");
+                    comments.setText(snapshot.getChildrenCount()+" Comments");
                 }
             }
 
