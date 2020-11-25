@@ -1,5 +1,6 @@
 package com.example.petopiaapp.ui.home;
 import com.example.petopiaapp.Activities.PostActivity;
+import com.example.petopiaapp.Adapter.FinalPostAdapter;
 import com.example.petopiaapp.Adapter.PostAdapter_temp;
 import com.example.petopiaapp.R;
 
@@ -14,6 +15,7 @@ import android.graphics.drawable.ColorDrawable;
 import android.icu.text.MessagePattern;
 import android.net.Uri;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -39,6 +41,7 @@ import androidx.viewpager2.widget.CompositePageTransformer;
 import androidx.viewpager2.widget.MarginPageTransformer;
 import androidx.viewpager2.widget.ViewPager2;
 
+import com.example.petopiaapp.models.FinalPost;
 import com.example.petopiaapp.models.Post_temp;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.firebase.auth.FirebaseAuth;
@@ -69,15 +72,11 @@ public class HomeFragment extends Fragment implements  View.OnClickListener{
     private List<Slide> listslides;
 
     Dialog  popup_add_post;
-    ImageView popupUserImage, popupPostButton, popupAlbumButton;
-    ViewPager2 popupPostImage;
-    TextView popupTitle, popupDescription;
-    ProgressBar popupClickProgress;
 
     RecyclerView recyclerView ;
     RecyclerView.LayoutManager layoutManager;
-    PostAdapter_temp postAdapter ;
-    List<Post_temp> postLists ;
+    FinalPostAdapter postAdapter ;
+    List<FinalPost> postLists ;
     private List<String> followingList;
 
 
@@ -88,13 +87,18 @@ public class HomeFragment extends Fragment implements  View.OnClickListener{
 
         recyclerView = view.findViewById(R.id.postRV);
         recyclerView.setHasFixedSize(true);
+
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext());
         linearLayoutManager.setReverseLayout(true);
         linearLayoutManager.setStackFromEnd(true);
+
         recyclerView.setLayoutManager(linearLayoutManager);
+
+        // Log.d("aaaaaaaaaa", "lalalalalala");
         postLists = new ArrayList<>();
-        postAdapter = new PostAdapter_temp(getContext(),postLists);
+        postAdapter = new FinalPostAdapter(getContext(), postLists);
         recyclerView.setAdapter(postAdapter);
+
 
         checkFollowing();
 
@@ -150,12 +154,19 @@ public class HomeFragment extends Fragment implements  View.OnClickListener{
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 postLists.clear();
                 for(DataSnapshot snapshot1:snapshot.getChildren()){
-                    Post_temp post = snapshot1.getValue(Post_temp.class);
+                    FinalPost post = snapshot1.getValue(FinalPost.class);
+                    postLists.add(post);
+
+                    /*
                     for (String id : followingList){
+                        Log.d("aaaaaaaaaa", "lalalalalala" + id);
+                        Log.d("aaaaaaaaaa", "publisher" + post.getPublisher());
                         if(post.getPublisher().equals(id)){
                             postLists.add(post);
                         }
                     }
+                     */
+
                 }
 
                 postAdapter.notifyDataSetChanged();
