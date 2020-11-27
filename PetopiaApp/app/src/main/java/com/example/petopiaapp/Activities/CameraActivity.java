@@ -1,21 +1,27 @@
 package com.example.petopiaapp.Activities;
 
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
+import android.graphics.Rect;
 import android.graphics.drawable.BitmapDrawable;
+import android.media.Image;
 import android.os.Bundle;
+import android.os.Environment;
 import android.os.SystemClock;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.TextureView;
 import android.view.View;
 import android.view.ViewStub;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import org.pytorch.IValue;
 import org.pytorch.Module;
@@ -28,13 +34,21 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.nio.FloatBuffer;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.LinkedList;
 import java.util.Locale;
 import java.util.Queue;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.annotation.WorkerThread;
+import androidx.camera.core.ImageCapture;
+import androidx.camera.core.ImageCaptureException;
+import androidx.camera.core.ImageInfo;
 import androidx.camera.core.ImageProxy;
+import androidx.camera.view.PreviewView;
+import androidx.core.content.ContextCompat;
 
 import com.example.petopiaapp.R;
 
@@ -77,6 +91,7 @@ public class CameraActivity extends AbstractCameraXActivity<CameraActivity.Analy
     private Tensor mInputTensor;
     private long mMovingAvgSum = 0;
     private Queue<Long> mMovingAvgQueue = new LinkedList<>();
+    private ImageButton cameraButton;
 
     @Override
     protected int getContentViewLayoutId() {
@@ -84,12 +99,20 @@ public class CameraActivity extends AbstractCameraXActivity<CameraActivity.Analy
     }
 
     @Override
-    protected TextureView getCameraPreviewTextureView() {
-        return ((ViewStub) findViewById(R.id.camera_texture_view_stub))
-                .inflate()
-                .findViewById(R.id.camera_texture_view);
+    protected PreviewView getCameraPreviewView() {
+        return (PreviewView)findViewById(R.id.camera_preview_view);
     }
+    private String getBatchDirectoryName() {
 
+        String app_folder_path = "";
+        app_folder_path = Environment.getExternalStorageDirectory().toString() + "/images";
+        File dir = new File(app_folder_path);
+        if (!dir.exists()) {
+            dir.mkdirs();
+        }
+
+        return app_folder_path;
+    }
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -98,10 +121,39 @@ public class CameraActivity extends AbstractCameraXActivity<CameraActivity.Analy
         mMsAvgText = findViewById(R.id.camera_ms_avg_text);
         mlenText = findViewById(R.id.camera_len);
         imgView = findViewById(R.id.imageView);
+        cameraButton = (ImageButton)findViewById(R.id.imageButton);
+        cameraButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                SimpleDateFormat mDateFormat = new SimpleDateFormat("yyyyMMddHHmmss", Locale.US);
+                File file = new File(getBatchDirectoryName(), mDateFormat.format(new Date())+ ".jpg");
+                ImageCapture.OutputFileOptions outputFileOptions =
+                        new ImageCapture.OutputFileOptions.Builder(file).build();
+                imageCapture.takePicture(outputFileOptions, executor,
+                        new ImageCapture.OnImageSavedCallback() {
+                            @Override
+                            public void onImageSaved(@NonNull ImageCapture.OutputFileResults outputFileResults) {
+                                //Toast.makeText(getApplicationContext(), "이미지 저장 성공", Toast.LENGTH_LONG).show();
+                                Log.e("petopia", "image saved");
+                            }
+
+                            @Override
+                            public void onError(@NonNull ImageCaptureException exception) {
+                                //Toast.makeText(getApplicationContext(), "이미지 저장 실패", Toast.LENGTH_LONG).show();
+                                Log.e("petopia", "image saved error");
+                            }
+                        });
+            }
+        });
+        View decorView = getWindow().getDecorView();
+        // Hide the status bar.
+        int uiOptions = View.SYSTEM_UI_FLAG_FULLSCREEN;
+        decorView.setSystemUiVisibility(uiOptions);
     }
 
     @Override
     protected void applyToUiAnalyzeImageResult(AnalysisResult result) {
+        Log.e("petopia", "running");
         mMovingAvgSum += result.moduleForwardDuration;
         mMovingAvgQueue.add(result.moduleForwardDuration);
         if (mMovingAvgQueue.size() > MOVING_AVG_PERIOD) {
@@ -127,9 +179,9 @@ public class CameraActivity extends AbstractCameraXActivity<CameraActivity.Analy
                 mMsAvgText.setVisibility(View.VISIBLE);
             }
         }
-        Bitmap bitmap = ((TextureView)findViewById(R.id.camera_texture_view)).getBitmap();
+
+        Bitmap bitmap = ((PreviewView)findViewById(R.id.camera_preview_view)).getBitmap();
         int w = bitmap.getWidth(), h = bitmap.getHeight();
-        Log.e("petopia", String.valueOf(h)+String.valueOf(w));
         Bitmap overlay = Bitmap.createBitmap(w, h, Bitmap.Config.ARGB_8888);
         Paint paint = new Paint();
         paint.setAntiAlias(true);
@@ -186,7 +238,9 @@ public class CameraActivity extends AbstractCameraXActivity<CameraActivity.Analy
     @Override
     @WorkerThread
     @Nullable
-    protected AnalysisResult analyzeImage(ImageProxy image, int rotationDegrees) {
+    protected AnalysisResult analyzeImage(ImageProxy image) {
+        Log.e("petopia", "analazing");
+        int rotationDegrees = image.getImageInfo().getRotationDegrees();
         if (mAnalyzeImageErrorState) {
             return null;
         }
@@ -216,9 +270,9 @@ public class CameraActivity extends AbstractCameraXActivity<CameraActivity.Analy
             final long moduleForwardDuration = SystemClock.elapsedRealtime() - moduleForwardStartTime;
 
             final float[] scores = outputTensor.getDataAsFloatArray();
-
             final long analysisDuration = SystemClock.elapsedRealtime() - startTime;
             return new AnalysisResult(scores.length, scores, moduleForwardDuration, analysisDuration);
+
         } catch (Exception e) {
             Log.e("petopia", "Error during image analysis", e);
             mAnalyzeImageErrorState = true;

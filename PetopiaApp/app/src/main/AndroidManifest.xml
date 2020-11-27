@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     package="com.example.petopiaapp">
 
     <uses-permission android:name="android.permission.INTERNET" />
@@ -17,14 +18,15 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".Activities.QnaDetailActivity"></activity>
+        <activity android:name=".Activities.QnaDetailActivity"/>
         <activity android:name=".Fragment.EditProfileActivity" />
         <activity android:name=".Activities.PostActivity" />
         <activity android:name=".Activities.CommentsActivity" />
         <activity android:name=".Activities.SignupActivity" />
         <activity android:name=".Activities.HomeActivity" />
-        <activity android:name=".Activities.CameraActivity"></activity>
-        <activity android:name=".Activities.StatusBarUtils" />
+        <activity android:name=".Activities.CameraActivity"/>
+        <activity android:name=".Activities.StatusBarUtils"
+            tools:ignore="Instantiatable" />
         <activity android:name=".Activities.AbstractCameraXActivity" />
         <activity android:name=".Activities.BaseModuleActivity" />
         <activity
