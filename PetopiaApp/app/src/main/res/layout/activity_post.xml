@@ -31,16 +31,19 @@
                     android:src="@drawable/ic_close"
                     android:id="@+id/close" />
 
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="POST"
-                    android:id="@+id/post"
-                    android:textSize="16sp"
+
+                <ImageView
+                    android:padding="12dp"
+                    android:id="@+id/go_to_album"
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:src="@drawable/ic_baseline_add_photo_alternate_24"
+                    android:background="@drawable/circle_bg"
+                    android:backgroundTint="#FF9800"
                     android:layout_marginEnd="10dp"
                     android:layout_centerVertical="true"
                     android:layout_alignParentEnd="true"
-                    android:textColor="@color/colorPrimary"/>
+                    />
 
 
             </RelativeLayout>
@@ -56,21 +59,40 @@
         android:orientation="vertical"
         >
 
-        <ImageView
+        <androidx.viewpager2.widget.ViewPager2
+            android:background="#2d2d2d"
             android:layout_width="match_parent"
-            android:layout_height="200dp"
-            android:scaleType="centerInside"
-            android:layout_gravity="center"
-            android:src="@mipmap/ic_launcher"
+            android:layout_height="225dp"
             android:id="@+id/image_added" />
 
         <EditText
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="15dp"
+            android:layout_marginTop="12dp"
+            android:hint="Title"
+            android:maxLines="5"
+            android:id="@+id/title" />
+
+        <EditText
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
             android:hint="Description"
             android:maxLines="5"
             android:id="@+id/description" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="POST"
+            android:id="@+id/post"
+            android:textSize="16sp"
+            android:layout_margin="10dp"
+            android:layout_centerVertical="true"
+            android:layout_alignParentEnd="true"
+            android:textColor="@color/colorPrimary"
+            android:layout_gravity="center_horizontal"/>
+
     </LinearLayout>
 
 </LinearLayout>
