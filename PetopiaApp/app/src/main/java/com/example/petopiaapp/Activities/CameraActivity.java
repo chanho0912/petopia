@@ -2,7 +2,9 @@ package com.example.petopiaapp.Activities;
 
 
 import android.annotation.SuppressLint;
+import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Color;
@@ -39,6 +41,7 @@ import java.util.Date;
 import java.util.LinkedList;
 import java.util.Locale;
 import java.util.Queue;
+import java.util.concurrent.Executors;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -48,6 +51,7 @@ import androidx.camera.core.ImageCaptureException;
 import androidx.camera.core.ImageInfo;
 import androidx.camera.core.ImageProxy;
 import androidx.camera.view.PreviewView;
+import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 
 import com.example.petopiaapp.R;
@@ -57,8 +61,8 @@ public class CameraActivity extends AbstractCameraXActivity<CameraActivity.Analy
     public static final String INTENT_MODULE_ASSET_NAME = "INTENT_MODULE_ASSET_NAME";
     public static final String INTENT_INFO_VIEW_TYPE = "INTENT_INFO_VIEW_TYPE";
 
-    private static final int INPUT_TENSOR_WIDTH = 416;
-    private static final int INPUT_TENSOR_HEIGHT = 416;
+    private static final int INPUT_TENSOR_WIDTH = 192;
+    private static final int INPUT_TENSOR_HEIGHT = 192;
     private static final int MOVING_AVG_PERIOD = 10;
     private static final String FORMAT_MS = "%dms";
     private static final String FORMAT_AVG_MS = "avg:%.0fms";
@@ -92,6 +96,7 @@ public class CameraActivity extends AbstractCameraXActivity<CameraActivity.Analy
     private long mMovingAvgSum = 0;
     private Queue<Long> mMovingAvgQueue = new LinkedList<>();
     private ImageButton cameraButton;
+    private ImageButton auto_cameraButton;
 
     @Override
     protected int getContentViewLayoutId() {
@@ -102,17 +107,47 @@ public class CameraActivity extends AbstractCameraXActivity<CameraActivity.Analy
     protected PreviewView getCameraPreviewView() {
         return (PreviewView)findViewById(R.id.camera_preview_view);
     }
+
     private String getBatchDirectoryName() {
 
         String app_folder_path = "";
         app_folder_path = Environment.getExternalStorageDirectory().toString() + "/images";
-        File dir = new File(app_folder_path);
+        app_folder_path = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES).toString();
+        Log.e("petopia", app_folder_path);
+        File dir = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES);
         if (!dir.exists()) {
             dir.mkdirs();
         }
 
         return app_folder_path;
     }
+
+    protected void takePicture() {
+        SimpleDateFormat mDateFormat = new SimpleDateFormat("yyyyMMddHHmmss", Locale.US);
+        File file = new File(getBatchDirectoryName(), mDateFormat.format(new Date())+ ".jpg");
+        ImageCapture.OutputFileOptions outputFileOptions =
+                new ImageCapture.OutputFileOptions.Builder(file).build();
+        imageCapture.takePicture(outputFileOptions, executor,
+                new ImageCapture.OnImageSavedCallback() {
+                    @Override
+                    public void onImageSaved(@NonNull ImageCapture.OutputFileResults outputFileResults) {
+                        //Toast.makeText(getApplicationContext(), "이미지 저장 성공", Toast.LENGTH_LONG).show();
+                        Log.e("petopia", "image saved" + file.getAbsolutePath());
+                        Intent intent = new Intent(CameraActivity.this, Camera_PictureActivity.class);
+                        intent.putExtra("imgpath", file.getAbsolutePath());
+                        startActivity(intent);
+                        finish();
+
+                    }
+
+                    @Override
+                    public void onError(@NonNull ImageCaptureException exception) {
+                        //Toast.makeText(getApplicationContext(), "이미지 저장 실패", Toast.LENGTH_LONG).show();
+                        Log.e("petopia", "image saved error");
+                    }
+                });
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -125,26 +160,11 @@ public class CameraActivity extends AbstractCameraXActivity<CameraActivity.Analy
         cameraButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                SimpleDateFormat mDateFormat = new SimpleDateFormat("yyyyMMddHHmmss", Locale.US);
-                File file = new File(getBatchDirectoryName(), mDateFormat.format(new Date())+ ".jpg");
-                ImageCapture.OutputFileOptions outputFileOptions =
-                        new ImageCapture.OutputFileOptions.Builder(file).build();
-                imageCapture.takePicture(outputFileOptions, executor,
-                        new ImageCapture.OnImageSavedCallback() {
-                            @Override
-                            public void onImageSaved(@NonNull ImageCapture.OutputFileResults outputFileResults) {
-                                //Toast.makeText(getApplicationContext(), "이미지 저장 성공", Toast.LENGTH_LONG).show();
-                                Log.e("petopia", "image saved");
-                            }
-
-                            @Override
-                            public void onError(@NonNull ImageCaptureException exception) {
-                                //Toast.makeText(getApplicationContext(), "이미지 저장 실패", Toast.LENGTH_LONG).show();
-                                Log.e("petopia", "image saved error");
-                            }
-                        });
+                takePicture();
             }
         });
+        auto_cameraButton = (ImageButton)findViewById(R.id.auto_imageButton);
+
         View decorView = getWindow().getDecorView();
         // Hide the status bar.
         int uiOptions = View.SYSTEM_UI_FLAG_FULLSCREEN;
@@ -153,7 +173,6 @@ public class CameraActivity extends AbstractCameraXActivity<CameraActivity.Analy
 
     @Override
     protected void applyToUiAnalyzeImageResult(AnalysisResult result) {
-        Log.e("petopia", "running");
         mMovingAvgSum += result.moduleForwardDuration;
         mMovingAvgQueue.add(result.moduleForwardDuration);
         if (mMovingAvgQueue.size() > MOVING_AVG_PERIOD) {
@@ -189,10 +208,12 @@ public class CameraActivity extends AbstractCameraXActivity<CameraActivity.Analy
         paint.setStyle(Paint.Style.STROKE);
         paint.setStrokeWidth(3);
         if(result.len >= 5) {
-
+            if(auto_cameraButton.isPressed()) {
+                Log.e("petopia", "auto image save");
+            }
             for(int i = 0; i < result.len; i+=5) {
                 Canvas canvas = new Canvas(overlay);
-                canvas.drawRect((int)(result.scores[i] * (float)w/416.0), (int)(result.scores[i+1] * (float)w/416.0) + (h-w)/2, (int)(result.scores[i+2] * (float)w/416.0), (int)(result.scores[i+3] * (float)w/416.0) + (h-w)/2, paint);
+                canvas.drawRect((int)(result.scores[i] * (float)w/192.0), (int)(result.scores[i+1] * (float)h/192.0), (int)(result.scores[i+2] * (float)w/192.0), (int)(result.scores[i+3] * (float)h/192.0), paint);
             }
 
         }
@@ -203,15 +224,15 @@ public class CameraActivity extends AbstractCameraXActivity<CameraActivity.Analy
         if (!TextUtils.isEmpty(mModuleAssetName)) {
             return mModuleAssetName;
         }
-        mModuleAssetName = "df_basedYolo_script.pt";
+        mModuleAssetName = "df_basedYolo_script_192.pt";
 
         return mModuleAssetName;
     }
 
-    @Override
-    protected String getInfoViewAdditionalText() {
-        return getModuleAssetName();
-    }
+//    @Override
+//    protected String getInfoViewAdditionalText() {
+//        return getModuleAssetName();
+//    }
 
     public static String assetFilePath(Context context, String assetName) {
         File file = new File(context.getFilesDir(), assetName);
@@ -239,7 +260,6 @@ public class CameraActivity extends AbstractCameraXActivity<CameraActivity.Analy
     @WorkerThread
     @Nullable
     protected AnalysisResult analyzeImage(ImageProxy image) {
-        Log.e("petopia", "analazing");
         int rotationDegrees = image.getImageInfo().getRotationDegrees();
         if (mAnalyzeImageErrorState) {
             return null;
@@ -279,11 +299,11 @@ public class CameraActivity extends AbstractCameraXActivity<CameraActivity.Analy
             return null;
         }
     }
-
-    @Override
-    protected int getInfoViewCode() {
-        return getIntent().getIntExtra(INTENT_INFO_VIEW_TYPE, -1);
-    }
+//
+//    @Override
+//    protected int getInfoViewCode() {
+//        return getIntent().getIntExtra(INTENT_INFO_VIEW_TYPE, -1);
+//    }
 
     @Override
     protected void onDestroy() {

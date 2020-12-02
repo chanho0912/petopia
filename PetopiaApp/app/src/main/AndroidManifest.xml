@@ -11,6 +11,7 @@
     <uses-feature android:name="android.hardware.camera" />
     <uses-feature android:name="android.hardware.camera.autofocus" />
     <uses-feature android:name="android.hardware.location.gps" />
+
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
@@ -18,17 +19,18 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".Activities.QnaDetailActivity"/>
+        <activity android:name=".Activities.Camera_PictureActivity"></activity>
+        <activity android:name=".Activities.QnaDetailActivity" />
         <activity android:name=".Fragment.EditProfileActivity" />
         <activity android:name=".Activities.PostActivity" />
         <activity android:name=".Activities.CommentsActivity" />
         <activity android:name=".Activities.SignupActivity" />
         <activity android:name=".Activities.HomeActivity" />
-        <activity android:name=".Activities.CameraActivity"/>
-        <activity android:name=".Activities.StatusBarUtils"
+        <activity android:name=".Activities.CameraActivity" />
+        <activity
+            android:name=".Activities.StatusBarUtils"
             tools:ignore="Instantiatable" />
         <activity android:name=".Activities.AbstractCameraXActivity" />
-        <activity android:name=".Activities.BaseModuleActivity" />
         <activity
             android:name="com.theartofdev.edmodo.cropper.CropImageActivity"
             android:theme="@style/Base.Theme.AppCompat" />

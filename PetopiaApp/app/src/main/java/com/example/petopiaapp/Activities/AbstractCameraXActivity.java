@@ -3,25 +3,16 @@ package com.example.petopiaapp.Activities;
 import android.Manifest;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
-import android.os.SystemClock;
-import android.util.Log;
 import android.util.Size;
-import android.view.TextureView;
-import android.view.View;
 import android.widget.Toast;
 
-import com.example.petopiaapp.Activities.BaseModuleActivity;
-import com.example.petopiaapp.Activities.StatusBarUtils;
 import com.google.common.util.concurrent.ListenableFuture;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.annotation.UiThread;
 import androidx.annotation.WorkerThread;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.camera.core.Camera;
 import androidx.camera.core.CameraSelector;
-import androidx.camera.core.CameraX;
 import androidx.camera.core.ImageAnalysis;
 import androidx.camera.core.ImageCapture;
 import androidx.camera.core.ImageProxy;
@@ -33,10 +24,10 @@ import androidx.core.content.ContextCompat;
 import androidx.lifecycle.LifecycleOwner;
 
 import java.util.concurrent.ExecutionException;
-import java.util.concurrent.Executor;
+import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
-public abstract class AbstractCameraXActivity<R> extends BaseModuleActivity {
+public abstract class AbstractCameraXActivity<R> extends AppCompatActivity {
     private static final int REQUEST_CODE_CAMERA_PERMISSION = 200;
     private static final String[] PERMISSIONS = {Manifest.permission.CAMERA, Manifest.permission.WRITE_EXTERNAL_STORAGE};
 
@@ -44,18 +35,19 @@ public abstract class AbstractCameraXActivity<R> extends BaseModuleActivity {
 
     protected abstract int getContentViewLayoutId();
     protected abstract PreviewView getCameraPreviewView();
+    protected boolean waited;
 
     protected ImageCapture imageCapture;
-    protected Executor executor;
+    protected ExecutorService executor;
     protected ListenableFuture<ProcessCameraProvider> cameraProviderFuture;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        waited = false;
         StatusBarUtils.setStatusBarOverlay(getWindow(), true);
         setContentView(getContentViewLayoutId());
-        startBackgroundThread();
-        executor = ContextCompat.getMainExecutor(this);
+        //startBackgroundThread();
+        executor = Executors.newSingleThreadExecutor();
         if (ActivityCompat.checkSelfPermission(this, Manifest.permission.CAMERA)
                 != PackageManager.PERMISSION_GRANTED || ActivityCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE)
                 != PackageManager.PERMISSION_GRANTED) {
@@ -66,6 +58,11 @@ public abstract class AbstractCameraXActivity<R> extends BaseModuleActivity {
         } else {
             setupCameraX();
         }
+    }
+    @Override
+    protected void onPause() {
+        if(!executor.isShutdown()) executor.shutdown();
+        super.onPause();
     }
 
     @Override
@@ -95,15 +92,15 @@ public abstract class AbstractCameraXActivity<R> extends BaseModuleActivity {
 
         final ImageAnalysis imageAnalysis =
                 new ImageAnalysis.Builder()
-                        .setTargetResolution(new Size(416, 416))
+                        .setTargetResolution(new Size(192, 192))
                         .setBackpressureStrategy(ImageAnalysis.STRATEGY_KEEP_ONLY_LATEST)
                         .build();
         imageAnalysis.setAnalyzer(executor, (image) -> {
-            Log.e("petopia", "runninggg");
 
             final R result = analyzeImage(image);
             image.close();
             if (result != null) {
+                //applyToUiAnalyzeImageResult(result);
                 runOnUiThread(() -> applyToUiAnalyzeImageResult(result));
             }
         });
@@ -125,13 +122,13 @@ public abstract class AbstractCameraXActivity<R> extends BaseModuleActivity {
                 // No errors need to be handled for this Future.
                 // This should never be reached.
             }
-        }, executor);
+        }, ContextCompat.getMainExecutor(this));
     }
 
     @WorkerThread
     @Nullable
     protected abstract R analyzeImage(ImageProxy image);
 
-    @UiThread
+    //@UiThread
     protected abstract void applyToUiAnalyzeImageResult(R result);
 }
