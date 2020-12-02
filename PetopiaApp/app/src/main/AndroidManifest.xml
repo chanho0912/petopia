@@ -1,10 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     package="com.example.petopiaapp">
 
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.CAMERA" />
+
+    <uses-feature android:name="android.hardware.camera" />
+    <uses-feature android:name="android.hardware.camera.autofocus" />
+    <uses-feature android:name="android.hardware.location.gps" />
 
     <application
         android:allowBackup="true"
@@ -13,12 +19,18 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".Activities.QnaDetailActivity"></activity>
+        <activity android:name=".Activities.Camera_PictureActivity"></activity>
+        <activity android:name=".Activities.QnaDetailActivity" />
         <activity android:name=".Fragment.EditProfileActivity" />
         <activity android:name=".Activities.PostActivity" />
         <activity android:name=".Activities.CommentsActivity" />
         <activity android:name=".Activities.SignupActivity" />
         <activity android:name=".Activities.HomeActivity" />
+        <activity android:name=".Activities.CameraActivity" />
+        <activity
+            android:name=".Activities.StatusBarUtils"
+            tools:ignore="Instantiatable" />
+        <activity android:name=".Activities.AbstractCameraXActivity" />
         <activity
             android:name="com.theartofdev.edmodo.cropper.CropImageActivity"
             android:theme="@style/Base.Theme.AppCompat" />

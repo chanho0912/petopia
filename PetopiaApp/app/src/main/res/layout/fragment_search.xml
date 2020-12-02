@@ -13,17 +13,49 @@
         android:layout_height="wrap_content"
         android:id="@+id/bar"
         android:background="?android:attr/windowBackground">
-
         <androidx.appcompat.widget.Toolbar
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:id="@+id/toolbar1"
+            android:background="?android:attr/windowBackground">
+
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+                    <ImageView
+                        android:layout_width="35dp"
+                        android:layout_height="35dp"
+                        android:layout_marginLeft="20dp"
+                        android:src="@drawable/app_icon"/>
+                    <ImageView
+                        android:layout_width="180dp"
+                        android:layout_height="35dp"
+                        android:layout_alignParentStart="true"
+                        android:src="@drawable/app_title"/>
+
+                </LinearLayout>
+
+
+            </RelativeLayout>
+        </androidx.appcompat.widget.Toolbar>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="35dp"
             android:background="@drawable/box_round_gray"
             android:id="@+id/toolbar">
 
             <ImageView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:src="@drawable/ic_search_light"/>
+                android:src="@drawable/ic_search_light"
+                android:layout_gravity="center_vertical"
+                android:layout_marginStart="16dp"
+                android:layout_marginEnd="8dp"/>
 
             <EditText
                 android:layout_width="match_parent"
@@ -31,11 +63,10 @@
                 android:id="@+id/search_bar"
                 android:background="@android:color/transparent"
                 android:hint="Search.."
-                android:layout_marginStart="10dp"
-                android:layout_marginLeft="10dp"/>
-
-
-        </androidx.appcompat.widget.Toolbar>
+                android:layout_gravity="center_vertical"
+                android:layout_marginStart="8dp"
+                android:layout_marginLeft="8dp"/>
+        </LinearLayout>
 
     </com.google.android.material.appbar.AppBarLayout>
 

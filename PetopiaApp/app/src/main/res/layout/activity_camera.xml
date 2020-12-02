@@ -1,0 +1,133 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@android:color/black"
+    android:fitsSystemWindows="true"
+    tools:context=".Activities.CameraActivity">
+
+    <LinearLayout
+        android:id="@+id/camera_option_button_layout"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:orientation="horizontal"
+        android:background="#FFFFFF"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toTopOf="@id/camera_texture_view_stub">
+
+
+    </LinearLayout>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/camera_texture_view_stub"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        app:layout_constraintBottom_toTopOf="@id/camera_button_layout"
+        app:layout_constraintDimensionRatio="3:4"
+        app:layout_constraintTop_toBottomOf="@id/camera_option_button_layout">
+
+        <androidx.camera.view.PreviewView
+            android:id="@+id/camera_preview_view"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:visibility="visible" />
+
+        <ImageView
+            android:id="@+id/imageView"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:visibility="visible" />
+
+        <TextView
+            android:id="@+id/camera_ms_text"
+            style="@style/cameraText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginRight="8dp"
+            android:layout_marginBottom="8dp"
+            android:elevation="1dp"
+            android:visibility="invisible"
+            app:layout_constraintBottom_toBottomOf="@id/camera_preview_view"
+            app:layout_constraintRight_toRightOf="@id/camera_preview_view" />
+
+        <TextView
+            android:id="@+id/camera_fps_text"
+            style="@style/cameraText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginRight="8dp"
+            android:layout_marginBottom="8dp"
+            android:elevation="1dp"
+            android:visibility="invisible"
+            app:layout_constraintBottom_toBottomOf="@id/camera_preview_view"
+            app:layout_constraintRight_toLeftOf="@id/camera_ms_text" />
+
+        <TextView
+            android:id="@+id/camera_ms_avg_text"
+            style="@style/cameraText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginRight="8dp"
+            android:layout_marginBottom="8dp"
+            android:elevation="1dp"
+            android:visibility="invisible"
+            app:layout_constraintBottom_toBottomOf="@id/camera_preview_view"
+            app:layout_constraintRight_toLeftOf="@id/camera_fps_text" />
+
+        <TextView
+            android:id="@+id/camera_len"
+            style="@style/cameraText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginRight="8dp"
+            android:layout_marginBottom="8dp"
+            android:elevation="1dp"
+            android:visibility="invisible"
+            app:layout_constraintBottom_toBottomOf="@id/camera_preview_view"
+            app:layout_constraintRight_toLeftOf="@id/camera_ms_avg_text" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/camera_button_layout"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:background="#FFFFFF"
+        app:layout_constraintTop_toBottomOf="@id/camera_texture_view_stub"
+        app:layout_constraintBottom_toBottomOf="parent">
+
+        <ImageButton
+            android:id="@+id/imageButton"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            app:layout_constraintDimensionRatio="1:1"
+            android:background="@android:color/transparent"
+            android:scaleType="fitXY"
+            android:tint="@color/camera_button"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:srcCompat="@drawable/ic_round_radio_button_checked_24" />
+
+        <ImageButton
+            android:id="@+id/auto_imageButton"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:background="@android:color/transparent"
+            android:scaleType="fitXY"
+            android:scaleX="0.5"
+            android:scaleY="0.5"
+            android:tint="@color/auto_camera_button"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintDimensionRatio="1:1"
+            app:layout_constraintLeft_toRightOf="@+id/imageButton"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:srcCompat="@drawable/vector_auto_capture" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

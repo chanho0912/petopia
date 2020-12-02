@@ -1,44 +1,58 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout
+<androidx.cardview.widget.CardView
     xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:padding="8dp">
+    app:cardCornerRadius="5dp"
+    app:cardElevation="3dp"
+    app:cardUseCompatPadding="true">
 
-    <de.hdodenhof.circleimageview.CircleImageView
-        android:layout_width="50dp"
-        android:layout_height="50dp"
-        android:id="@+id/image_profile"
-        android:src="@mipmap/ic_launcher" />
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="horizontal"
+            android:layout_gravity="center_vertical">
 
-    <LinearLayout
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_toEndOf="@+id/image_profile"
-        android:layout_marginStart="5dp"
-        android:orientation="vertical"
-        android:layout_centerVertical="true">
+            <de.hdodenhof.circleimageview.CircleImageView
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:layout_margin="10dp"
+                android:id="@+id/image_profile"
+                android:src="@mipmap/ic_launcher"
+                android:layout_marginStart="8dp"
+                android:layout_marginEnd="8dp"/>
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/username"
-            android:maxLines="1"
-            android:textStyle="bold"
-            android:textColor="@color/colorPrimaryDark"
-            android:text="username"/>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/username"
+                android:layout_gravity="center_vertical"
+                android:textSize="16sp"
+                android:textStyle="bold"
+                android:textColor="@color/colorPrimaryDark"
+                android:text="username"
+                android:layout_marginStart="8dp"
+                android:layout_marginEnd="8dp"
+                />
+            <View
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:layout_weight="1" >
 
-    </LinearLayout>
+            </View>
 
-    <Button
-        android:layout_width="wrap_content"
-        android:layout_height="30dp"
-        android:background="@drawable/button_background"
-        android:id="@+id/btn_follow"
-        android:textColor="@color/colorPrimary"
-        android:layout_alignParentEnd="true"
-        android:layout_centerVertical="true"
-        android:visibility="gone" />
+            <Button
+                android:layout_width="wrap_content"
+                android:layout_height="30dp"
+                android:background="@drawable/button_background"
+                android:id="@+id/btn_follow"
+                android:layout_gravity="center_vertical"
+                android:layout_marginStart="8dp"
+                android:layout_marginEnd="8dp"
+                android:textColor="@color/colorPrimary"
+                android:visibility="gone" />
+        </LinearLayout>
 
-
-</RelativeLayout>
+</androidx.cardview.widget.CardView>
